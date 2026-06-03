@@ -34,6 +34,10 @@ bobrwm bsp mirror horizontal          # IPC: horizontal | vertical
 bobrwm bsp equalize                   # IPC: set all split ratios to config ratio
 bobrwm bsp balance                    # IPC: proportional balance by subtree size
 bobrwm bsp rotate 90                  # IPC: 90 | 180 | 270
+bobrwm niri consume-window-left       # IPC: stack focused window into left column
+bobrwm niri consume-window-right      # IPC: stack focused window into right column
+bobrwm niri expel-window-left         # IPC: move focused window into new left column
+bobrwm niri expel-window-right        # IPC: move focused window into new right column
 bobrwm-swipe                          # optional trackpad swipe companion
 ```
 
@@ -103,7 +107,7 @@ Pixel spacing between and around windows:
 Choose the tiling algorithm:
 
 ```zon
-.layout = .bsp, // .bsp | .monocle
+.layout = .bsp, // .bsp | .monocle | .niri
 ```
 
 ### Workspaces
@@ -122,6 +126,11 @@ By default, bobrwm creates 10 workspaces. To configure a smaller count, provide 
 ```
 
 Workspace IDs are still 1-based, so the example above creates workspaces 1 through 4. Keybinds and app assignments should only reference workspaces in that range. The current maximum is 10 workspaces.
+
+`.niri` arranges windows in fixed-width columns on a horizontal strip. New
+windows open as new columns without resizing existing windows. Focus left/right
+scrolls between columns, focus up/down moves within a stacked column, and
+off-screen columns are parked with a 1px visible sliver for macOS.
 
 ### Workspace Assignments
 

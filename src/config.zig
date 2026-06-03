@@ -448,3 +448,23 @@ test "loadFromPath: custom zon" {
     try t.expectApproxEqAbs(@as(f64, 0.6), cfg.bsp_split_ratio, 0.0001);
     try t.expectEqual(tiling.InsertChild.first, cfg.new_window_split);
 }
+
+test "loadFromPath: niri layout" {
+    var arena = std.heap.ArenaAllocator.init(t.allocator);
+    defer arena.deinit();
+
+    const zon =
+        \\.{
+        \\    .layout = .niri,
+        \\}
+    ;
+
+    const path: [:0]const u8 = "/tmp/bobrwm_test_niri_config.zon";
+    if (!osutil.writeFile(path.ptr, zon)) return error.TestUnexpectedResult;
+    defer osutil.deleteFile(path.ptr);
+
+    const cfg = loadFromPath(arena.allocator(), path) orelse
+        return error.TestUnexpectedResult;
+
+    try t.expectEqual(layout_mod.LayoutKind.niri, cfg.layout);
+}

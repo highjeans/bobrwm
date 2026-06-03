@@ -25,12 +25,15 @@ pub const IpcCommand = union(enum) {
     bsp_equalize,
     bsp_balance,
     bsp_rotate: i32,
+    niri_consume_window: NiriSide,
+    niri_expel_window: NiriSide,
     query_windows: QueryFormat,
     query_workspaces: QueryFormat,
     query_displays: QueryFormat,
     query_apps: QueryFormat,
 
     pub const FocusDir = enum { left, right, up, down };
+    pub const NiriSide = enum { left, right };
 
     pub const WorkspaceTarget = union(enum) {
         prev,
@@ -54,6 +57,10 @@ pub const IpcCommand = union(enum) {
         if (std.mem.eql(u8, cmd, "toggle-split")) return .toggle_split;
         if (std.mem.eql(u8, cmd, "bsp equalize")) return .bsp_equalize;
         if (std.mem.eql(u8, cmd, "bsp balance")) return .bsp_balance;
+        if (std.mem.eql(u8, cmd, "niri consume-window-left")) return .{ .niri_consume_window = .left };
+        if (std.mem.eql(u8, cmd, "niri consume-window-right")) return .{ .niri_consume_window = .right };
+        if (std.mem.eql(u8, cmd, "niri expel-window-left")) return .{ .niri_expel_window = .left };
+        if (std.mem.eql(u8, cmd, "niri expel-window-right")) return .{ .niri_expel_window = .right };
         if (std.mem.eql(u8, cmd, "query windows")) return .{ .query_windows = .text };
         if (std.mem.eql(u8, cmd, "query windows --json")) return .{ .query_windows = .json };
         if (std.mem.eql(u8, cmd, "query workspaces")) return .{ .query_workspaces = .text };
@@ -273,4 +280,14 @@ test "parse focus workspace target" {
     try t.expectEqual(IpcCommand{ .focus_workspace = .prev }, IpcCommand.parse("focus-workspace prev").?);
     try t.expectEqual(IpcCommand{ .focus_workspace = .next }, IpcCommand.parse("focus-workspace next").?);
     try t.expectEqual(@as(?IpcCommand, null), IpcCommand.parse("focus-workspace previous"));
+}
+
+test "parse niri commands" {
+    const t = std.testing;
+
+    try t.expectEqual(IpcCommand{ .niri_consume_window = .left }, IpcCommand.parse("niri consume-window-left").?);
+    try t.expectEqual(IpcCommand{ .niri_consume_window = .right }, IpcCommand.parse("niri consume-window-right").?);
+    try t.expectEqual(IpcCommand{ .niri_expel_window = .left }, IpcCommand.parse("niri expel-window-left").?);
+    try t.expectEqual(IpcCommand{ .niri_expel_window = .right }, IpcCommand.parse("niri expel-window-right").?);
+    try t.expectEqual(@as(?IpcCommand, null), IpcCommand.parse("niri expel-window"));
 }

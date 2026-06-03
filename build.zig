@@ -266,6 +266,20 @@ pub fn build(b: *std.Build) !void {
 
     const run_tiling_tests = b.addRunArtifact(tiling_tests);
 
+    const niri_test_mod = b.createModule(.{
+        .root_source_file = b.path("src/niri_layout.zig"),
+        .target = target,
+        .optimize = optimize,
+        .link_libc = true,
+    });
+
+    const niri_tests = b.addTest(.{
+        .name = "niri-layout-tests",
+        .root_module = niri_test_mod,
+    });
+
+    const run_niri_tests = b.addRunArtifact(niri_tests);
+
     const swipe_test_mod = b.createModule(.{
         .root_source_file = b.path("packages/bobrwm-swipe/src/main.zig"),
         .target = target,
@@ -296,5 +310,6 @@ pub fn build(b: *std.Build) !void {
     test_step.dependOn(&run_ipc_tests.step);
     test_step.dependOn(&run_tabgroup_tests.step);
     test_step.dependOn(&run_tiling_tests.step);
+    test_step.dependOn(&run_niri_tests.step);
     test_step.dependOn(&run_swipe_tests.step);
 }

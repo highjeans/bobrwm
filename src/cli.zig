@@ -187,6 +187,12 @@ const help_text =
     \\  bsp balance               Balance the BSP tree
     \\  bsp rotate <degrees>      Rotate layout (90, 180, 270)
     \\
+    \\Niri Layout Commands (IPC):
+    \\  niri consume-window-left   Stack focused window into the left column
+    \\  niri consume-window-right  Stack focused window into the right column
+    \\  niri expel-window-left     Move focused window into a new left column
+    \\  niri expel-window-right    Move focused window into a new right column
+    \\
     \\Query Commands (IPC):
     \\  query windows [--json]    List windows on the active workspace
     \\  query workspaces [--json] List all workspaces

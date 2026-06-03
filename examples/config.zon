@@ -5,6 +5,8 @@
     // .layout = .bsp,
     // Or fullscreen-per-window tiling:
     // .layout = .monocle,
+    // Or scrollable column tiling:
+    // .layout = .niri,
 
     // BSP split axis policy.
     // .auto picks axis from target tile geometry (yabai-style).
